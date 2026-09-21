@@ -101,13 +101,14 @@ function BrandLogo({
           MONOGRAM
       ====================================================== */}
 
-    <div className="hidden sm:block">
+  <div className="block">
   <img
     src="/icons/logo.svg"
     alt="Rizzy's Design Concept"
     className="
       h-auto
-      w-[150px]
+      w-[90px]
+      sm:w-[120px]
       object-contain
     "
   />
