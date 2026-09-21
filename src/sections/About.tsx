@@ -274,15 +274,15 @@ export default function About() {
               amount: 0.2,
             }}
             variants={revealRight}
-            className="
-              max-w-[390px]
-              text-[12px]
-              font-light
-              leading-[1.85]
-              text-white/55
-              md:justify-self-end
-              md:text-[14px]
-            "
+           className="
+  max-w-[340px]
+  text-[10px]
+  font-light
+  leading-[1.7]
+  text-white/55
+  md:justify-self-end
+  md:text-[14px]
+"
             style={{
               fontFamily:
                 "var(--font-sans)",
@@ -541,7 +541,7 @@ export default function About() {
 
             <p
               className="
-                mt-10
+                mt-14
                 max-w-[760px]
                 text-[12px]
                 font-light
