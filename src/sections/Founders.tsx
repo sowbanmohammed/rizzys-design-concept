@@ -458,15 +458,16 @@ export default function Founders() {
             variants={revealRight}
           >
             <p
-              className="
-                max-w-[1000px]
-                text-[clamp(2rem,3.8vw,3.8rem)]
-                font-normal
-                italic
-                leading-[1.18]
-                tracking-[-0.035em]
-                text-[#e5ded2]/90
-              "
+             className=" 
+  max-w-[1000px] 
+  text-[clamp(1.65rem,3.8vw,3.8rem)] 
+  font-normal 
+  italic 
+  leading-[1.16] 
+  tracking-[-0.035em] 
+  text-[#e5ded2]/90 
+  md:text-[clamp(2rem,3.8vw,3.8rem)]
+"
               style={{
                 fontFamily:
                   "var(--font-display)",
@@ -480,15 +481,16 @@ export default function Founders() {
             </p>
 
             <p
-              className="
-                mt-9
-                max-w-[800px]
-                text-[12px]
-                font-light
-                leading-[1.9]
-                text-white/45
-                md:text-[14px]
-              "
+             className=" 
+  mt-14 
+  max-w-[800px] 
+  text-[12px] 
+  font-light 
+  leading-[1.9] 
+  text-white/45 
+  md:mt-9
+  md:text-[14px] 
+"
               style={{
                 fontFamily:
                   "var(--font-sans)",
