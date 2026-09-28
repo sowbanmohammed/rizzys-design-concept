@@ -4,18 +4,18 @@ import { motion, type Variants } from "framer-motion";
 
 const founders = [
   {
-    number: "",
-    name: "Mubeen Nadeem",
-    role: "Managing Partner",
-    image: "/images/founders/mubeen-nadeem.png",
-    alt: "Mubeen Nadeem, Founder of Rizzy's Design Concept",
-  },
-  {
-    number: "",
+    number: "01",
     name: "Mohammed Rizwan Nadeem",
     role: "Business Head",
     image: "/images/founders/mohammed-rizwan-nadeem.png",
     alt: "Mohammed Rizwan Nadeem, Founder of Rizzy's Design Concept",
+  },
+  {
+    number: "02",
+    name: "Mubeen Nadeem",
+    role: "Managing Partner",
+    image: "/images/founders/mubeen-nadeem.png",
+    alt: "Mubeen Nadeem, Founder of Rizzy's Design Concept",
   },
 ];
 
@@ -211,11 +211,25 @@ export default function Founders() {
           FOUNDERS
       ===================================================== */}
 
-      <div className="mx-auto mt-[12vh] w-[84vw] max-w-[1500px]">
+      <div
+        className="
+          mx-auto
+          mt-[10vh]
+          w-[84vw]
+          max-w-[1500px]
+
+          sm:mt-[11vh]
+
+          md:mt-[12vh]
+        "
+      >
         <div
           className="
             grid
-            gap-[12vh]
+            gap-[10vh]
+
+            sm:gap-[12vh]
+
             md:grid-cols-2
             md:gap-[7vw]
           "
@@ -236,6 +250,8 @@ export default function Founders() {
               }
               className={`
                 relative
+                min-w-0
+
                 ${
                   index === 1
                     ? "md:mt-[14vh]"
@@ -251,9 +267,17 @@ export default function Founders() {
                 className="
                   group
                   relative
-                  aspect-[0.78]
+                  mx-auto
+                  aspect-[0.82]
+                  w-[88%]
                   overflow-hidden
                   bg-[#151311]
+
+                  sm:w-[90%]
+
+                  md:mx-0
+                  md:aspect-[0.78]
+                  md:w-full
                 "
               >
                 <motion.div
@@ -313,6 +337,33 @@ export default function Founders() {
                   "
                 />
 
+                {/* NUMBER */}
+
+                <div
+                  className="
+                    absolute
+                    right-[7%]
+                    top-[7%]
+                  "
+                >
+                  <span
+                    className="
+                      text-[9px]
+                      tracking-[0.28em]
+                      text-white/65
+
+                      sm:text-[10px]
+
+                      md:text-[11px]
+                    "
+                    style={{
+                      fontFamily: "var(--font-sans)",
+                    }}
+                  >
+                    {founder.number}
+                  </span>
+                </div>
+
                 {/* ROLE */}
 
                 <div
@@ -321,18 +372,23 @@ export default function Founders() {
                     bottom-[7%]
                     left-[7%]
                     flex
+                    max-w-[80%]
                     items-center
                     gap-3
                   "
                 >
-                  <span className="h-px w-8 bg-[#c8a96b]" />
+                  <span className="h-px w-7 shrink-0 bg-[#c8a96b] sm:w-8" />
 
                   <span
                     className="
-                      text-[8px]
+                      whitespace-nowrap
+                      text-[7px]
                       uppercase
-                      tracking-[0.32em]
+                      tracking-[0.28em]
                       text-white/70
+
+                      sm:text-[8px]
+                      sm:tracking-[0.32em]
                     "
                     style={{
                       fontFamily:
@@ -348,17 +404,35 @@ export default function Founders() {
                   FOUNDER NAME
               ================================================= */}
 
-              <div className="mt-7">
-                <div className="flex items-start justify-between gap-5">
+              <div
+                className="
+                  mx-auto
+                  mt-6
+                  w-[88%]
+
+                  sm:mt-7
+                  sm:w-[90%]
+
+                  md:mx-0
+                  md:w-full
+                "
+              >
+                <div className="flex min-w-0 items-start justify-between gap-4">
                   <h3
                     className="
+                      min-w-0
                       max-w-[540px]
-                      text-[clamp(2.6rem,5.3vw,5.5rem)]
+                      break-words
+                      text-[clamp(2.25rem,9vw,5.5rem)]
                       font-normal
                       italic
                       leading-[0.88]
                       tracking-[-0.045em]
                       text-[#eee8dc]
+
+                      sm:text-[clamp(2.5rem,6vw,5.5rem)]
+
+                      md:text-[clamp(2.6rem,5.3vw,5.5rem)]
                     "
                     style={{
                       fontFamily:
@@ -371,30 +445,34 @@ export default function Founders() {
 
                   <span
                     className="
-                      mt-3
+                      hidden
+                      shrink-0
                       text-[8px]
                       uppercase
                       tracking-[0.3em]
                       text-[#c8a96b]/75
+
                       md:mt-4
+                      md:block
                     "
                     style={{
                       fontFamily:
                         "var(--font-sans)",
                     }}
-                  >
-                    
-                  </span>
+                  />
                 </div>
 
                 {/* SMALL GOLD LINE */}
 
                 <div
                   className="
-                    mt-6
+                    mt-5
                     h-px
-                    w-12
+                    w-10
                     bg-[#c8a96b]/60
+
+                    sm:mt-6
+                    sm:w-12
                   "
                 />
               </div>
@@ -413,6 +491,7 @@ export default function Founders() {
             grid
             gap-12
             py-[15vh]
+
             md:grid-cols-[0.55fr_1.45fr]
             md:gap-24
             md:items-start
@@ -458,16 +537,17 @@ export default function Founders() {
             variants={revealRight}
           >
             <p
-             className=" 
-  max-w-[1000px] 
-  text-[clamp(1.65rem,3.8vw,3.8rem)] 
-  font-normal 
-  italic 
-  leading-[1.16] 
-  tracking-[-0.035em] 
-  text-[#e5ded2]/90 
-  md:text-[clamp(2rem,3.8vw,3.8rem)]
-"
+              className="
+                max-w-[1000px]
+                text-[clamp(1.65rem,3.8vw,3.8rem)]
+                font-normal
+                italic
+                leading-[1.16]
+                tracking-[-0.035em]
+                text-[#e5ded2]/90
+
+                md:text-[clamp(2rem,3.8vw,3.8rem)]
+              "
               style={{
                 fontFamily:
                   "var(--font-display)",
@@ -481,16 +561,17 @@ export default function Founders() {
             </p>
 
             <p
-             className=" 
-  mt-14 
-  max-w-[800px] 
-  text-[12px] 
-  font-light 
-  leading-[1.9] 
-  text-white/45 
-  md:mt-9
-  md:text-[14px] 
-"
+              className="
+                mt-14
+                max-w-[800px]
+                text-[12px]
+                font-light
+                leading-[1.9]
+                text-white/45
+
+                md:mt-9
+                md:text-[14px]
+              "
               style={{
                 fontFamily:
                   "var(--font-sans)",
