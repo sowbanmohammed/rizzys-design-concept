@@ -153,9 +153,11 @@ const fadeUp: Variants = {
 
 /* =========================================================
    IMAGE COMPONENT
-   - No crop
-   - No stretch
-   - Natural aspect ratio
+
+   IMPORTANT:
+   - ONLY main / first image gets mobile height
+   - ALL OTHER IMAGES stay natural / original
+   - Desktop remains natural
 ========================================================= */
 
 function ProjectImage({
@@ -167,43 +169,51 @@ function ProjectImage({
 }) {
   return (
     <div
-      className="
+      className={`
         group
         relative
         w-full
         overflow-hidden
         bg-[#151311]
-      "
+
+        ${
+          main
+            ? `
+              h-[28vh]
+              min-h-[180px]
+              max-h-[260px]
+
+              sm:h-[32vh]
+              sm:min-h-[220px]
+              sm:max-h-[330px]
+
+              md:h-[380px]
+              md:min-h-0
+              md:max-h-[380px]
+            `
+            : `
+              h-auto
+            `
+        }
+      `}
     >
       <motion.img
         src={image}
         alt=""
         draggable={false}
-        initial={{
-          opacity: 0,
-          scale: 1.04,
-        }}
-        whileInView={{
-          opacity: 1,
-          scale: 1,
-        }}
-        viewport={{
-          once: false,
-          amount: 0.1,
-        }}
+        initial={{ opacity: 0, scale: 1.04 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: false, amount: 0.1 }}
         transition={{
-          opacity: {
-            duration: main ? 1.1 : 0.9,
-          },
+          opacity: { duration: main ? 1.1 : 0.9 },
           scale: {
             duration: main ? 1.5 : 1.25,
             ease: [0.22, 1, 0.36, 1],
           },
         }}
-        className="
+        className={`
           relative
           block
-          h-auto
           w-full
           object-contain
           object-center
@@ -211,7 +221,18 @@ function ProjectImage({
           duration-[1200ms]
           ease-out
           group-hover:scale-[1.015]
-        "
+
+          ${
+            main
+              ? `
+                h-full
+                md:h-full
+              `
+              : `
+                h-auto
+              `
+          }
+        `}
       />
 
       <div
@@ -227,19 +248,10 @@ function ProjectImage({
         `}
       />
 
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-[3.5%]
-          border
-          border-white/10
-        "
-      />
+      <div className="pointer-events-none absolute inset-[3.5%] border border-white/10" />
     </div>
   );
 }
-
 /* =========================================================
    PROJECT HEADER
 ========================================================= */
@@ -252,9 +264,13 @@ function ProjectHeader({
   return (
     <div
       className="
-        mb-8
+        mb-7
         grid
-        gap-7
+        gap-5
+
+        sm:mb-8
+        sm:gap-6
+
         md:mb-10
         md:grid-cols-[1fr_auto]
         md:items-end
@@ -263,26 +279,33 @@ function ProjectHeader({
       <div>
         <div
           className="
-            mb-5
+            mb-4
             flex
             items-center
             gap-3
+
+            sm:mb-5
           "
         >
           <span
             className="
               h-px
-              w-8
+              w-7
               bg-[#c8a96b]
+
+              sm:w-8
             "
           />
 
           <span
             className="
-              text-[8px]
+              text-[7px]
               uppercase
-              tracking-[0.32em]
+              tracking-[0.3em]
               text-white/45
+
+              sm:text-[8px]
+
               md:text-[9px]
             "
             style={{
@@ -295,11 +318,15 @@ function ProjectHeader({
 
         <h3
           className="
-            text-[clamp(2.7rem,6vw,6rem)]
+            text-[clamp(2.45rem,11vw,4.8rem)]
             font-normal
             leading-[0.84]
             tracking-[-0.045em]
             text-white
+
+            sm:text-[clamp(2.7rem,8vw,6rem)]
+
+            md:text-[clamp(2.7rem,6vw,6rem)]
           "
           style={{
             fontFamily: "var(--font-display)",
@@ -310,11 +337,15 @@ function ProjectHeader({
 
         <p
           className="
-            mt-4
-            text-[8px]
+            mt-3
+            text-[7px]
             uppercase
-            tracking-[0.28em]
+            tracking-[0.25em]
             text-white/35
+
+            sm:mt-4
+            sm:text-[8px]
+            sm:tracking-[0.28em]
           "
           style={{
             fontFamily: "var(--font-sans)",
@@ -326,9 +357,11 @@ function ProjectHeader({
 
       <span
         className="
-          text-[10px]
+          text-[9px]
           tracking-[0.25em]
           text-white/25
+
+          md:text-[10px]
         "
         style={{
           fontFamily: "var(--font-sans)",
@@ -363,30 +396,44 @@ function ProjectDescription({
       className={`
         relative
         max-w-[570px]
-        ${align === "right" ? "ml-auto text-right" : ""}
+
+        ${
+          align === "right"
+            ? "ml-auto text-right"
+            : ""
+        }
       `}
     >
       <span
         className="
-          mb-5
+          mb-4
           block
           h-px
-          w-12
+          w-10
           bg-[#c8a96b]/70
+
+          sm:mb-5
+          sm:w-12
         "
         style={{
-          marginLeft: align === "right" ? "auto" : undefined,
+          marginLeft:
+            align === "right"
+              ? "auto"
+              : undefined,
         }}
       />
 
       <p
         className="
-          text-[19px]
+          text-[16px]
           font-normal
           italic
           leading-[1.55]
           tracking-[-0.01em]
           text-[#d8d0c2]/85
+
+          sm:text-[18px]
+
           md:text-[23px]
         "
         style={{
@@ -410,39 +457,54 @@ function ProjectOne() {
     <div>
       <ProjectHeader project={project} />
 
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{
-          once: false,
-          amount: 0.12,
-        }}
-        variants={revealUp}
-        className="relative"
-      >
-        <ProjectImage
-          image={project.images[0]}
-          main
-        />
-      </motion.div>
-
       <div
         className="
-          mt-8
-          md:mt-12
-          md:ml-[10vw]
+          grid
+          gap-6
+
+          md:block
         "
       >
-        <ProjectDescription
-          description={project.description}
-        />
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: false,
+            amount: 0.12,
+          }}
+          variants={revealUp}
+          className="relative"
+        >
+          <ProjectImage
+            image={project.images[0]}
+            main
+          />
+        </motion.div>
+
+        <div
+          className="
+            mt-0
+
+            md:mt-12
+            md:ml-[10vw]
+          "
+        >
+          <ProjectDescription
+            description={project.description}
+          />
+        </div>
       </div>
+
+      {/* SECONDARY IMAGES */}
 
       <div
         className="
           mt-8
           grid
           gap-5
+
+          sm:mt-10
+
           md:mt-12
           md:grid-cols-[0.72fr_1.28fr]
           md:items-start
@@ -477,6 +539,8 @@ function ProjectOne() {
         </motion.div>
       </div>
 
+      {/* FOURTH IMAGE */}
+
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -488,6 +552,7 @@ function ProjectOne() {
         className="
           relative
           mt-5
+
           md:ml-[17vw]
           md:mt-8
         "
@@ -514,7 +579,8 @@ function ProjectTwo() {
       <div
         className="
           grid
-          gap-8
+          gap-6
+
           md:grid-cols-[0.72fr_1.28fr]
           md:items-start
           md:gap-[6vw]
@@ -528,7 +594,9 @@ function ProjectTwo() {
             amount: 0.12,
           }}
           variants={revealLeft}
-          className="md:mt-[8vh]"
+          className="
+            md:mt-[8vh]
+          "
         >
           <ProjectImage
             image={project.images[0]}
@@ -553,7 +621,10 @@ function ProjectTwo() {
 
           <div
             className="
-              mt-8
+              mt-6
+
+              sm:mt-8
+
               md:mt-10
             "
           >
@@ -567,6 +638,9 @@ function ProjectTwo() {
               mt-8
               grid
               gap-5
+
+              sm:mt-10
+
               md:mt-12
               md:grid-cols-2
               md:items-start
@@ -603,6 +677,8 @@ function ProjectThree() {
     <div>
       <ProjectHeader project={project} />
 
+      {/* MAIN IMAGE */}
+
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -619,9 +695,14 @@ function ProjectThree() {
         />
       </motion.div>
 
+      {/* DESCRIPTION */}
+
       <div
         className="
-          mt-8
+          mt-6
+
+          sm:mt-8
+
           md:ml-[24vw]
           md:mt-12
         "
@@ -632,11 +713,16 @@ function ProjectThree() {
         />
       </div>
 
+      {/* OTHER IMAGES */}
+
       <div
         className="
           mt-8
           grid
           gap-5
+
+          sm:mt-10
+
           md:mt-12
           md:grid-cols-[1fr_0.75fr_1fr]
           md:items-start
@@ -698,10 +784,15 @@ function ProjectFour() {
 
   return (
     <div>
+      {/* HEADER + MAIN IMAGE */}
+
       <div
         className="
           grid
-          gap-10
+          gap-7
+
+          sm:gap-10
+
           md:grid-cols-[0.35fr_1fr]
           md:items-start
           md:gap-[7vw]
@@ -736,9 +827,14 @@ function ProjectFour() {
         </motion.div>
       </div>
 
+      {/* DESCRIPTION */}
+
       <div
         className="
-          mt-8
+          mt-6
+
+          sm:mt-8
+
           md:ml-[23vw]
           md:mt-12
         "
@@ -748,11 +844,16 @@ function ProjectFour() {
         />
       </div>
 
+      {/* SECONDARY IMAGES */}
+
       <div
         className="
           mt-8
           grid
           gap-5
+
+          sm:mt-10
+
           md:ml-[23vw]
           md:mt-12
           md:grid-cols-[1.15fr_0.85fr]
@@ -789,6 +890,8 @@ function ProjectFour() {
         </motion.div>
       </div>
 
+      {/* FOURTH IMAGE */}
+
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -799,6 +902,7 @@ function ProjectFour() {
         variants={revealUp}
         className="
           mt-5
+
           md:ml-[40vw]
           md:mt-8
         "
@@ -822,6 +926,8 @@ function ProjectFive() {
     <div>
       <ProjectHeader project={project} />
 
+      {/* MAIN IMAGE */}
+
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -838,9 +944,14 @@ function ProjectFive() {
         />
       </motion.div>
 
+      {/* DESCRIPTION */}
+
       <div
         className="
-          mt-8
+          mt-6
+
+          sm:mt-8
+
           md:ml-[10vw]
           md:mt-12
         "
@@ -850,11 +961,16 @@ function ProjectFive() {
         />
       </div>
 
+      {/* SECONDARY IMAGES */}
+
       <div
         className="
           mt-8
           grid
           gap-5
+
+          sm:mt-10
+
           md:mt-12
           md:grid-cols-[1.3fr_0.7fr]
           md:items-start
@@ -890,6 +1006,8 @@ function ProjectFive() {
         </motion.div>
       </div>
 
+      {/* FOURTH IMAGE */}
+
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -901,6 +1019,7 @@ function ProjectFive() {
         className="
           relative
           mt-5
+
           md:ml-[18vw]
           md:mt-8
         "
@@ -969,6 +1088,7 @@ export default function Projects() {
               uppercase
               tracking-[0.34em]
               text-white/45
+
               md:text-[10px]
             "
             style={{
@@ -983,7 +1103,10 @@ export default function Projects() {
           className="
             mt-8
             grid
-            gap-10
+            gap-8
+
+            sm:gap-10
+
             md:mt-12
             md:grid-cols-[1.3fr_0.7fr]
             md:items-end
@@ -999,11 +1122,12 @@ export default function Projects() {
             variants={revealLeft}
             className="
               max-w-[950px]
-              text-[clamp(3.2rem,10vw,7.8rem)]
+              text-[clamp(3.1rem,10vw,7.8rem)]
               font-normal
               leading-[0.84]
               tracking-[-0.05em]
               text-white
+
               md:text-[clamp(4rem,7.5vw,8rem)]
             "
             style={{
@@ -1032,6 +1156,7 @@ export default function Projects() {
               font-light
               leading-[1.85]
               text-white/50
+
               md:justify-self-end
               md:text-[14px]
             "
@@ -1054,9 +1179,11 @@ export default function Projects() {
       <div
         className="
           mx-auto
-          mt-[13vh]
+          mt-[12vh]
           w-[84vw]
           max-w-[1500px]
+
+          md:mt-[13vh]
         "
       >
         <ProjectOne />
@@ -1069,9 +1196,13 @@ export default function Projects() {
       <div
         className="
           mx-auto
-          mt-[20vh]
+          mt-[16vh]
           w-[84vw]
           max-w-[1500px]
+
+          sm:mt-[18vh]
+
+          md:mt-[20vh]
         "
       >
         <ProjectTwo />
@@ -1084,9 +1215,13 @@ export default function Projects() {
       <div
         className="
           mx-auto
-          mt-[20vh]
+          mt-[16vh]
           w-[84vw]
           max-w-[1500px]
+
+          sm:mt-[18vh]
+
+          md:mt-[20vh]
         "
       >
         <ProjectThree />
@@ -1099,9 +1234,13 @@ export default function Projects() {
       <div
         className="
           mx-auto
-          mt-[20vh]
+          mt-[16vh]
           w-[84vw]
           max-w-[1500px]
+
+          sm:mt-[18vh]
+
+          md:mt-[20vh]
         "
       >
         <ProjectFour />
@@ -1114,9 +1253,13 @@ export default function Projects() {
       <div
         className="
           mx-auto
-          mt-[20vh]
+          mt-[16vh]
           w-[84vw]
           max-w-[1500px]
+
+          sm:mt-[18vh]
+
+          md:mt-[20vh]
         "
       >
         <ProjectFive />
@@ -1144,10 +1287,12 @@ export default function Projects() {
           variants={fadeUp}
           className="
             relative
-            mt-[20vh]
+            mt-[18vh]
             border-t
             border-white/10
             pt-[10vh]
+
+            md:mt-[20vh]
           "
         >
           <div
