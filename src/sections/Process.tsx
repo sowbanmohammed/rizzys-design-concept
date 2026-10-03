@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, type Variants } from "framer-motion";
+import { createPortal } from "react-dom";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -18,6 +19,7 @@ const introFade: Variants = {
   visible: {
     opacity: 1,
     y: 0,
+
     transition: {
       duration: 1.2,
       ease,
@@ -36,6 +38,7 @@ const introTitle: Variants = {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
+
     transition: {
       duration: 1.45,
       ease,
@@ -58,6 +61,7 @@ const imageFromLeft: Variants = {
     opacity: 1,
     x: 0,
     scale: 1,
+
     transition: {
       duration: 1.5,
       ease,
@@ -76,6 +80,7 @@ const imageFromRight: Variants = {
     opacity: 1,
     x: 0,
     scale: 1,
+
     transition: {
       duration: 1.5,
       ease,
@@ -96,6 +101,7 @@ const textFromLeft: Variants = {
   visible: {
     opacity: 1,
     x: 0,
+
     transition: {
       duration: 1.35,
       ease,
@@ -112,6 +118,7 @@ const textFromRight: Variants = {
   visible: {
     opacity: 1,
     x: 0,
+
     transition: {
       duration: 1.35,
       ease,
@@ -134,6 +141,7 @@ const childReveal: Variants = {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
+
     transition: {
       duration: 1,
       ease,
@@ -154,6 +162,7 @@ const dividerReveal: Variants = {
   visible: {
     opacity: 1,
     scaleX: 1,
+
     transition: {
       duration: 1.2,
       ease,
@@ -164,6 +173,37 @@ const dividerReveal: Variants = {
 /* =========================================================
    GALLERY ANIMATIONS
 ========================================================= */
+
+const galleryContainer: Variants = {
+  hidden: {},
+
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const galleryItem: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 80,
+    scale: 0.96,
+    filter: "blur(7px)",
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+
+    transition: {
+      duration: 1.15,
+      ease,
+    },
+  },
+};
 
 const galleryHeading: Variants = {
   hidden: {
@@ -176,6 +216,7 @@ const galleryHeading: Variants = {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
+
     transition: {
       duration: 1.25,
       ease,
@@ -256,104 +297,156 @@ const steps = [
 const galleryImages = [
   {
     id: 1,
-    image: "/images/gallery1.jpg",
+    image: "/images/gallery1.jpeg",
     title: "Living Room",
     subtitle: "Comfort meets elegance",
   },
 
   {
     id: 2,
-    image: "/images/gallery2.jpg",
-    title: "Contemporary Kitchen",
+    image: "/images/gallery2.jpeg",
+    title: "TV Unit",
     subtitle: "Modern. Functional. Beautiful.",
   },
 
   {
     id: 3,
-    image: "/images/gallery3.jpg",
-    title: "Bedroom",
+    image: "/images/gallery3.jpeg",
+    title: "Stylish Wardrobe",
     subtitle: "Your private retreat",
   },
 
   {
     id: 4,
-    image: "/images/gallery4.jpg",
-    title: "Living Details",
+    image: "/images/gallery4.jpeg",
+    title: "Wooden Wardrobe",
     subtitle: "Thoughtfully considered",
   },
 
   {
     id: 5,
-    image: "/images/gallery5.jpg",
-    title: "Kitchen Details",
+    image: "/images/gallery5.jpeg",
+    title: "Bedroom",
     subtitle: "Designed around you",
   },
 
   {
     id: 6,
-    image: "/images/gallery6.jpg",
-    title: "Bedroom Details",
+    image: "/images/gallery6.jpeg",
+    title: "Living Area",
     subtitle: "Quiet. Warm. Personal.",
   },
 
   {
     id: 7,
-    image: "/images/gallery7.jpg",
-    title: "Material & Texture",
-    subtitle: "The beauty is in the details",
+    image: "/images/gallery9.jpeg",
+    title: "Specious Living Room",
+    subtitle: "Made unmistakably yours",
   },
 
   {
     id: 8,
-    image: "/images/gallery8.jpg",
-    title: "Contemporary Spaces",
+    image: "/images/gallery8.jpeg",
+    title: "Kitchen",
     subtitle: "Form meets function",
   },
 
   {
     id: 9,
-    image: "/images/gallery9.jpg",
-    title: "Finished Space",
-    subtitle: "Made unmistakably yours",
+    image: "/images/gallery7.jpeg",
+    title: "Contemporary Space",
+    subtitle: "The beauty is in the details",
   },
 ];
 
 /* =========================================================
-   GALLERY MARQUEE CARD
+   GALLERY CARD
+   IMPORTANT:
+   Both original and duplicate groups use this SAME component.
+   So styling can never become different between cycles.
 ========================================================= */
+
+type GalleryCardProps = {
+  item: (typeof galleryImages)[number];
+  index: number;
+  duplicate?: boolean;
+  onOpen: (index: number) => void;
+};
 
 function GalleryCard({
   item,
   index,
-  onClick,
-}: {
-  item: (typeof galleryImages)[number];
-  index: number;
-  onClick: () => void;
-}) {
+  duplicate = false,
+  onOpen,
+}: GalleryCardProps) {
   return (
     <motion.button
       type="button"
-      onClick={onClick}
-      className="group relative block h-[330px] w-[260px] shrink-0 overflow-hidden text-left focus:outline-none focus-visible:ring-1 focus-visible:ring-[#c8a96b]/70 sm:h-[390px] sm:w-[310px] md:h-[450px] md:w-[360px] lg:h-[500px] lg:w-[400px]"
+      variants={duplicate ? undefined : galleryItem}
+      onClick={() => onOpen(index)}
+      tabIndex={duplicate ? -1 : undefined}
+      aria-hidden={duplicate ? true : undefined}
+      className="
+        group relative
+        h-[220px]
+        min-h-[220px]
+        w-[60vw]
+        min-w-[60vw]
+        shrink-0
+        overflow-hidden
+        rounded-xl
+        text-left
+        focus:outline-none
+        focus-visible:ring-1
+        focus-visible:ring-[#c8a96b]/80
+
+        sm:h-[330px]
+        sm:min-h-[330px]
+        sm:w-[50vw]
+        sm:min-w-[50vw]
+
+        md:h-[420px]
+        md:min-h-[420px]
+        md:w-[40vw]
+        md:min-w-[40vw]
+
+        lg:h-[470px]
+        lg:min-h-[470px]
+        lg:w-[34vw]
+        lg:min-w-[34vw]
+
+        xl:h-[510px]
+        xl:min-h-[510px]
+        xl:w-[30vw]
+        xl:min-w-[30vw]
+      "
       whileHover={{
-        y: -8,
+        y: -6,
+        scale: 1.018,
       }}
       transition={{
-        duration: 0.55,
+        duration: 0.6,
         ease,
       }}
     >
-      {/* IMAGE */}
+      {/* ===================================================
+          IMAGE
+      =================================================== */}
 
       <motion.img
         src={item.image}
-        alt={item.title}
+        alt={duplicate ? "" : item.title}
+        loading={
+          duplicate
+            ? "lazy"
+            : index < 4
+              ? "eager"
+              : "lazy"
+        }
         draggable={false}
-        loading={index > 2 ? "lazy" : "eager"}
         className="absolute inset-0 h-full w-full object-cover"
         whileHover={{
-          scale: 1.08,
+          scale: 1.055,
         }}
         transition={{
           duration: 1.4,
@@ -361,65 +454,83 @@ function GalleryCard({
         }}
       />
 
-      {/* DARK GRADIENT */}
+      {/* ===================================================
+          DARK OVERLAY
+      =================================================== */}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/5 opacity-75 transition-opacity duration-700 group-hover:opacity-95" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/5 opacity-80 transition-opacity duration-700 group-hover:opacity-95" />
 
-      {/* SUBTLE WARM TONE */}
+      {/* ===================================================
+          WARM FILM
+      =================================================== */}
 
-      <div className="absolute inset-0 bg-[#6d5231]/[0.045] mix-blend-multiply" />
+      <div className="absolute inset-0 bg-[#6d5231]/[0.055] mix-blend-multiply" />
 
-      {/* BORDER */}
+      {/* ===================================================
+          BORDER
+      =================================================== */}
 
-      <div className="absolute inset-0 border border-white/[0.10] transition-all duration-700 group-hover:border-[#c8a96b]/45" />
+      <div className="absolute inset-0 rounded-xl border border-white/[0.09] transition-all duration-700 group-hover:border-[#c8a96b]/45" />
 
-      {/* TOP NUMBER */}
+      {/* ===================================================
+          TOP NUMBER
+      =================================================== */}
 
-      <div className="absolute left-5 top-5 flex items-center gap-3 md:left-7 md:top-7">
-        <span className="font-sans text-[9px] tracking-[0.3em] text-white/75">
+      <div className="absolute left-5 top-5 flex items-center gap-3 sm:left-6 sm:top-6 md:left-7 md:top-7">
+        <span className="font-sans text-[9px] tracking-[0.3em] text-white/70 sm:text-[10px]">
           {String(item.id).padStart(2, "0")}
         </span>
 
-        <span className="h-px w-7 bg-white/40 transition-all duration-500 group-hover:w-12 group-hover:bg-[#c8a96b]/80" />
+        <span className="h-px w-7 bg-white/35 transition-all duration-500 group-hover:w-12 group-hover:bg-[#c8a96b]/70" />
       </div>
 
-      {/* CENTER CIRCLE */}
+      {/* ===================================================
+          TOP RIGHT CORNER
+      =================================================== */}
 
-      <div className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 scale-90 items-center justify-center rounded-full border border-white/25 bg-black/10 opacity-0 backdrop-blur-md transition-all duration-700 group-hover:scale-100 group-hover:opacity-100">
-        <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-white">
-          View
+      <div className="absolute right-5 top-5 h-6 w-6 opacity-60 transition-all duration-500 group-hover:rotate-90 group-hover:opacity-100 sm:right-6 sm:top-6 md:right-7 md:top-7">
+        <span className="absolute right-0 top-0 h-px w-6 bg-white/75" />
+
+        <span className="absolute right-0 top-0 h-6 w-px bg-white/75" />
+      </div>
+
+      {/* ===================================================
+          CENTER VIEW
+      =================================================== */}
+
+      <div className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 scale-90 items-center justify-center rounded-full border border-white/25 bg-black/10 opacity-0 backdrop-blur-md transition-all duration-700 group-hover:scale-100 group-hover:opacity-100">
+        <span className="relative block h-5 w-5">
+          <span className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/75" />
+
+          <span className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-white/75" />
         </span>
       </div>
 
-      {/* BOTTOM CONTENT */}
+      {/* ===================================================
+          BOTTOM CONTENT
+      =================================================== */}
 
-      <div className="absolute bottom-6 left-5 right-5 md:bottom-8 md:left-7 md:right-7">
-        <p className="font-display text-[27px] font-light leading-[0.95] text-white md:text-[34px]">
+      <div className="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6 md:bottom-7 md:left-7 md:right-7">
+        <p className="font-display text-[26px] font-light leading-none text-white transition-transform duration-700 group-hover:-translate-y-1 sm:text-[30px] md:text-[34px]">
           {item.title}
         </p>
 
-        <div className="mt-3 flex items-center gap-3">
-          <span className="h-px w-8 bg-[#c8a96b]/70 transition-all duration-500 group-hover:w-14" />
-
-          <p className="font-display text-[13px] italic text-[#c8a96b] md:text-[15px]">
-            {item.subtitle}
-          </p>
-        </div>
+        <p className="mt-2 font-display text-[13px] italic text-[#c8a96b] transition-all duration-700 sm:text-[14px] md:text-[15px]">
+          {item.subtitle}
+        </p>
       </div>
 
-      {/* CORNER DETAIL */}
+      {/* ===================================================
+          BOTTOM LINE
+      =================================================== */}
 
-      <div className="absolute right-5 top-5 h-6 w-6 opacity-50 transition-all duration-500 group-hover:rotate-90 group-hover:opacity-100 md:right-7 md:top-7">
-        <span className="absolute right-0 top-0 h-px w-6 bg-white/70" />
-
-        <span className="absolute right-0 top-0 h-6 w-px bg-white/70" />
-      </div>
+      <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-[#c8a96b] transition-all duration-1000 group-hover:w-full" />
     </motion.button>
   );
 }
 
 /* =========================================================
-   GALLERY
+   GALLERY COMPONENT
 ========================================================= */
 
 function Gallery() {
@@ -427,13 +538,26 @@ function Gallery() {
     null
   );
 
+  const [mounted, setMounted] = useState(false);
+
+  const [isMarqueePaused, setIsMarqueePaused] =
+    useState(false);
+
   const activeImage =
     activeIndex !== null
       ? galleryImages[activeIndex]
       : null;
 
   /* =======================================================
-     LIGHTBOX KEYBOARD
+     MOUNT
+  ======================================================= */
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  /* =======================================================
+     KEYBOARD CONTROLS
   ======================================================= */
 
   useEffect(() => {
@@ -445,45 +569,114 @@ function Gallery() {
       }
 
       if (event.key === "ArrowRight") {
-        setActiveIndex(
-          (activeIndex + 1) % galleryImages.length
-        );
+        setActiveIndex((current) => {
+          if (current === null) return null;
+
+          return (
+            (current + 1) %
+            galleryImages.length
+          );
+        });
       }
 
       if (event.key === "ArrowLeft") {
-        setActiveIndex(
-          (activeIndex - 1 + galleryImages.length) %
+        setActiveIndex((current) => {
+          if (current === null) return null;
+
+          return (
+            (current - 1 + galleryImages.length) %
             galleryImages.length
-        );
+          );
+        });
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-
-    const previousOverflow = document.body.style.overflow;
-
-    document.body.style.overflow = "hidden";
+    document.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-
-      document.body.style.overflow = previousOverflow;
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
     };
   }, [activeIndex]);
+
+  /* =======================================================
+     BODY SCROLL LOCK
+  ======================================================= */
+
+  useEffect(() => {
+    if (activeIndex !== null) {
+      const previousOverflow =
+        document.body.style.overflow;
+
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        document.body.style.overflow =
+          previousOverflow;
+      };
+    }
+  }, [activeIndex]);
+
+  /* =======================================================
+     OPEN IMAGE
+  ======================================================= */
+
+  const openImage = (index: number) => {
+    setActiveIndex(index);
+  };
+
+  /* =======================================================
+     PREVIOUS IMAGE
+  ======================================================= */
+
+  const previousImage = () => {
+    setActiveIndex((current) => {
+      if (current === null) return null;
+
+      return (
+        (current - 1 + galleryImages.length) %
+        galleryImages.length
+      );
+    });
+  };
+
+  /* =======================================================
+     NEXT IMAGE
+  ======================================================= */
+
+  const nextImage = () => {
+    setActiveIndex((current) => {
+      if (current === null) return null;
+
+      return (
+        (current + 1) %
+        galleryImages.length
+      );
+    });
+  };
 
   return (
     <>
       {/* ===================================================
-          GALLERY INTRO
+          GALLERY SECTION
       =================================================== */}
 
       <section
         id="gallery"
-        className="relative bg-[#080807] py-24 text-[#f1eee7] md:py-36"
+        className="relative overflow-hidden bg-[#080807] pb-32 pt-8 text-[#f1eee7] sm:pb-40 sm:pt-12 md:pb-48"
       >
-        <div className="mx-auto max-w-[1500px] px-6 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-12 gap-y-12">
-            {/* LABEL */}
+        <div className="mx-auto max-w-[1500px]">
+          {/* =================================================
+              GALLERY INTRO
+          ================================================= */}
+
+          <div className="grid grid-cols-12 gap-y-12 px-6 sm:px-8 lg:px-12">
+            {/* SECTION LABEL */}
 
             <motion.div
               className="col-span-12 lg:col-span-3"
@@ -499,7 +692,8 @@ function Gallery() {
                 <span
                   className="text-[15px] italic leading-none text-[#c8a96b]/90 md:text-[17px]"
                   style={{
-                    fontFamily: "var(--font-display)",
+                    fontFamily:
+                      "var(--font-display)",
                     fontWeight: 500,
                   }}
                 >
@@ -532,114 +726,139 @@ function Gallery() {
               </h2>
 
               <div className="mt-10 max-w-[560px] md:ml-[15%]">
-                <p className="font-sans text-[13px] font-light leading-[1.9] text-[#99948c] md:text-[14px]">
-                  A selection of interiors shaped by material,
-                  proportion, light and the individuality of the
-                  people who inhabit them.
+                <p className="font-sans text-[13px] font-light leading-[1.9] tracking-[0.01em] text-[#99948c] md:text-[14px]">
+                  A selection of interiors shaped by
+                  material, proportion, light and the
+                  individuality of the people who inhabit
+                  them.
                 </p>
               </div>
             </motion.div>
           </div>
-        </div>
-
-        {/* =================================================
-            MARQUEE AREA
-        ================================================= */}
-
-        <div className="relative mt-20 overflow-hidden md:mt-28">
-          {/* TOP LINE */}
-
-          <div className="mx-auto mb-8 flex max-w-[1500px] items-center justify-between px-6 sm:px-8 lg:px-12">
-            <div className="flex items-center gap-4">
-              <span className="h-[5px] w-[5px] rounded-full bg-[#c8a96b]" />
-
-              <span className="font-sans text-[9px] uppercase tracking-[0.34em] text-[#77736d]">
-                Interior Collection
-              </span>
-            </div>
-
-            <span className="font-sans text-[9px] uppercase tracking-[0.34em] text-[#77736d]">
-              09 Spaces
-            </span>
-          </div>
 
           {/* =================================================
-              RIGHT → LEFT CONTINUOUS MARQUEE
-
-              IMPORTANT:
-              The animation moves the whole track from
-              RIGHT TO LEFT.
-
-              Hover = pause.
+              GALLERY AUTO MARQUEE
           ================================================= */}
 
-          <div className="group/marquee relative w-full overflow-hidden">
+          <motion.div
+            className="relative mt-20 overflow-hidden md:mt-28"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: false,
+              amount: 0.12,
+            }}
+            variants={galleryContainer}
+            onMouseEnter={() =>
+              setIsMarqueePaused(true)
+            }
+            onMouseLeave={() =>
+              setIsMarqueePaused(false)
+            }
+          >
             {/* LEFT FADE */}
 
-            <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-20 bg-gradient-to-r from-[#080807] to-transparent md:w-40" />
+            <div className="pointer-events-none absolute left-0 top-0 z-30 h-full w-12 bg-gradient-to-r from-[#080807] via-[#080807]/80 to-transparent sm:w-20 md:w-32" />
 
             {/* RIGHT FADE */}
 
-            <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-20 bg-gradient-to-l from-[#080807] to-transparent md:w-40" />
+            <div className="pointer-events-none absolute right-0 top-0 z-30 h-full w-12 bg-gradient-to-l from-[#080807] via-[#080807]/80 to-transparent sm:w-20 md:w-32" />
 
-            <motion.div
-              className="flex w-max gap-4 md:gap-5"
-              animate={{
-                x: ["0%", "-50%"],
-              }}
-              transition={{
-                duration: 75,
-                ease: "linear",
-                repeat: Infinity,
-                repeatType: "loop",
-              }}
-              whileHover={{
-                animationPlayState: "paused",
-              }}
+            {/* =================================================
+                TRUE CONTINUOUS MARQUEE
+            ================================================= */}
+
+            <div
+              className="gallery-marquee-track"
               style={{
-                willChange: "transform",
+                animationPlayState:
+                  isMarqueePaused
+                    ? "paused"
+                    : "running",
               }}
             >
-              {/* FIRST SET */}
+              {/* =================================================
+                  FIRST GROUP
+              ================================================= */}
 
-              {galleryImages.map((item, index) => (
-                <GalleryCard
-                  key={`first-${item.id}`}
-                  item={item}
-                  index={index}
-                  onClick={() => setActiveIndex(index)}
-                />
-              ))}
+              <div className="gallery-marquee-group">
+                {galleryImages.map((item, index) => (
+                  <GalleryCard
+                    key={`gallery-original-${item.id}`}
+                    item={item}
+                    index={index}
+                    onOpen={openImage}
+                  />
+                ))}
+              </div>
 
-              {/* DUPLICATED SET
-                  Required for seamless infinite movement */}
+              {/* =================================================
+                  SECOND DUPLICATE GROUP
 
-              {galleryImages.map((item, index) => (
-                <GalleryCard
-                  key={`second-${item.id}`}
-                  item={item}
-                  index={index}
-                  onClick={() => setActiveIndex(index)}
-                />
-              ))}
-            </motion.div>
-          </div>
+                  EXACT SAME GalleryCard COMPONENT
+                  AS FIRST GROUP.
+              ================================================= */}
+
+              <div
+                className="gallery-marquee-group"
+                aria-hidden="true"
+              >
+                {galleryImages.map((item, index) => (
+                  <GalleryCard
+                    key={`gallery-duplicate-${item.id}`}
+                    item={item}
+                    index={index}
+                    duplicate
+                    onOpen={openImage}
+                  />
+                ))}
+              </div>
+            </div>
+          </motion.div>
 
           {/* =================================================
-              BOTTOM INFO
+              GALLERY FOOTER
           ================================================= */}
 
-          <div className="mx-auto mt-8 flex max-w-[1500px] flex-col justify-between gap-4 border-t border-white/[0.07] px-6 pt-5 sm:flex-row sm:items-center sm:px-8 lg:px-12">
+          <motion.div
+            className="mt-10 flex flex-col justify-between gap-5 border-t border-white/[0.07] px-6 pt-6 sm:flex-row sm:items-center sm:px-8 lg:px-12"
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: false,
+              amount: 0.3,
+            }}
+            transition={{
+              duration: 1,
+              ease,
+            }}
+          >
             <div className="flex items-center gap-4">
-              <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-[#77736d]">
-                Slowly moving through our work
+              <span className="h-[5px] w-[5px] rounded-full bg-[#c8a96b]" />
+
+              <span className="font-sans text-[9px] uppercase tracking-[0.32em] text-[#77736d]">
+                Selected interiors
               </span>
             </div>
 
-            <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-[#77736d]">
-              Click any image to explore
-            </span>
-          </div>
+            <div className="flex items-center gap-4">
+              <span className="hidden font-sans text-[9px] uppercase tracking-[0.32em] text-[#77736d] sm:block">
+                Slowly discovering spaces
+              </span>
+
+              <span className="h-px w-8 bg-[#c8a96b]/30" />
+
+              <span className="font-sans text-[9px] uppercase tracking-[0.32em] text-[#77736d]">
+                Click to explore
+              </span>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -647,194 +866,258 @@ function Gallery() {
           FULLSCREEN LIGHTBOX
       ===================================================== */}
 
-      {activeImage && activeIndex !== null && (
-        <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#050504]/[0.97] p-4 backdrop-blur-md sm:p-8"
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-          }}
-          exit={{
-            opacity: 0,
-          }}
-          onClick={() => setActiveIndex(null)}
-        >
-          {/* =================================================
-              TOP BAR
-          ================================================= */}
-
-          <div
-            className="absolute left-5 right-5 top-5 z-20 flex items-center justify-between sm:left-8 sm:right-8 sm:top-8"
-            onClick={(event) => event.stopPropagation()}
+      {mounted &&
+        activeImage &&
+        activeIndex !== null &&
+        createPortal(
+          <motion.div
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#050504]/[0.98] p-3 backdrop-blur-xl sm:p-6 md:p-8"
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.45,
+              ease,
+            }}
+            onClick={() => setActiveIndex(null)}
           >
-            <div className="flex items-center gap-4">
-              <span className="font-sans text-[10px] tracking-[0.3em] text-[#c8a96b]">
-                {String(activeImage.id).padStart(2, "0")}
-              </span>
+            {/* =================================================
+                TOP BAR
+            ================================================= */}
 
-              <span className="h-px w-8 bg-[#c8a96b]/40" />
+            <div
+              className="absolute left-4 right-4 top-4 z-30 flex items-center justify-between sm:left-7 sm:right-7 sm:top-7 md:left-9 md:right-9 md:top-9"
+              onClick={(event) =>
+                event.stopPropagation()
+              }
+            >
+              <div className="flex items-center gap-3 sm:gap-4">
+                <span className="font-sans text-[9px] tracking-[0.3em] text-[#c8a96b] sm:text-[10px]">
+                  {String(activeImage.id).padStart(
+                    2,
+                    "0"
+                  )}
+                </span>
 
-              <span className="hidden font-sans text-[9px] uppercase tracking-[0.3em] text-white/50 sm:block">
-                Rizzy&apos;s Design Concept
-              </span>
+                <span className="h-px w-6 bg-[#c8a96b]/40 sm:w-8" />
+
+                <span className="hidden font-sans text-[9px] uppercase tracking-[0.3em] text-white/50 sm:block">
+                  Rizzy&apos;s Design Concept
+                </span>
+              </div>
+
+              {/* CLOSE */}
+
+              <button
+                type="button"
+                aria-label="Close gallery"
+                onClick={() =>
+                  setActiveIndex(null)
+                }
+                className="group flex h-10 w-10 items-center justify-center border border-white/15 transition-all duration-500 hover:border-[#c8a96b]/60 hover:bg-[#c8a96b]/10 sm:h-11 sm:w-11"
+              >
+                <span className="relative block h-5 w-5">
+                  <span className="absolute left-1/2 top-1/2 h-px w-6 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-white/75 transition-colors group-hover:bg-[#c8a96b]" />
+
+                  <span className="absolute left-1/2 top-1/2 h-px w-6 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-white/75 transition-colors group-hover:bg-[#c8a96b]" />
+                </span>
+              </button>
             </div>
 
-            {/* CLOSE */}
+            {/* =================================================
+                PREVIOUS BUTTON
+            ================================================= */}
 
             <button
               type="button"
-              aria-label="Close gallery"
-              onClick={() => setActiveIndex(null)}
-              className="group flex h-11 w-11 items-center justify-center border border-white/15 transition-all duration-500 hover:border-[#c8a96b]/60 hover:bg-[#c8a96b]/10"
+              aria-label="Previous image"
+              onClick={(event) => {
+                event.stopPropagation();
+                previousImage();
+              }}
+              className="group absolute left-2 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/10 bg-black/25 backdrop-blur-md transition-all duration-500 hover:border-[#c8a96b]/50 hover:bg-[#c8a96b]/10 sm:left-5 sm:h-13 sm:w-13 md:left-8 md:h-14 md:w-14"
             >
-              <span className="relative block h-5 w-5">
-                <span className="absolute left-1/2 top-1/2 h-px w-6 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-white/75 transition-colors group-hover:bg-[#c8a96b]" />
-
-                <span className="absolute left-1/2 top-1/2 h-px w-6 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-white/75 transition-colors group-hover:bg-[#c8a96b]" />
+              <span className="text-lg font-light text-white/65 transition-all duration-500 group-hover:-translate-x-1 group-hover:text-[#c8a96b] sm:text-xl">
+                ←
               </span>
             </button>
-          </div>
 
-          {/* =================================================
-              PREVIOUS
-          ================================================= */}
+            {/* =================================================
+                MAIN IMAGE
+            ================================================= */}
 
-          <button
-            type="button"
-            aria-label="Previous image"
-            onClick={(event) => {
-              event.stopPropagation();
-
-              setActiveIndex(
-                (activeIndex - 1 + galleryImages.length) %
-                  galleryImages.length
-              );
-            }}
-            className="group absolute left-3 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/10 bg-black/20 backdrop-blur-sm transition-all duration-500 hover:border-[#c8a96b]/50 hover:bg-[#c8a96b]/10 sm:left-8 sm:h-14 sm:w-14"
-          >
-            <span className="text-xl font-light text-white/60 transition-all duration-500 group-hover:-translate-x-1 group-hover:text-[#c8a96b]">
-              ←
-            </span>
-          </button>
-
-          {/* =================================================
-              MAIN IMAGE
-          ================================================= */}
-
-          <motion.div
-            className="relative flex h-[72vh] w-full max-w-[1200px] items-center justify-center"
-            initial={{
-              opacity: 0,
-              scale: 0.94,
-              y: 25,
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              y: 0,
-            }}
-            transition={{
-              duration: 0.7,
-              ease,
-            }}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <img
-              src={activeImage.image}
-              alt={activeImage.title}
-              className="max-h-full max-w-full object-contain"
-            />
-
-            <div className="pointer-events-none absolute inset-0 border border-white/[0.08]" />
-          </motion.div>
-
-          {/* =================================================
-              NEXT
-          ================================================= */}
-
-          <button
-            type="button"
-            aria-label="Next image"
-            onClick={(event) => {
-              event.stopPropagation();
-
-              setActiveIndex(
-                (activeIndex + 1) % galleryImages.length
-              );
-            }}
-            className="group absolute right-3 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/10 bg-black/20 backdrop-blur-sm transition-all duration-500 hover:border-[#c8a96b]/50 hover:bg-[#c8a96b]/10 sm:right-8 sm:h-14 sm:w-14"
-          >
-            <span className="text-xl font-light text-white/60 transition-all duration-500 group-hover:translate-x-1 group-hover:text-[#c8a96b]">
-              →
-            </span>
-          </button>
-
-          {/* =================================================
-              BOTTOM INFO
-          ================================================= */}
-
-          <motion.div
-            className="absolute bottom-5 left-5 right-5 z-20 flex flex-col gap-4 sm:bottom-8 sm:left-8 sm:right-8 sm:flex-row sm:items-end sm:justify-between"
-            initial={{
-              opacity: 0,
-              y: 20,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              delay: 0.15,
-              duration: 0.7,
-              ease,
-            }}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div>
-              <h3 className="font-display text-[32px] font-light leading-none text-white sm:text-[42px]">
-                {activeImage.title}
-              </h3>
-
-              <p className="mt-2 font-display text-[14px] italic text-[#c8a96b] sm:text-[16px]">
-                {activeImage.subtitle}
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-white/35">
-                {String(activeIndex + 1).padStart(2, "0")}
-              </span>
-
-              <span className="h-px w-8 bg-white/20" />
-
-              <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-white/35">
-                {String(galleryImages.length).padStart(2, "0")}
-              </span>
-            </div>
-          </motion.div>
-
-          {/* =================================================
-              PROGRESS
-          ================================================= */}
-
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-white/[0.08]">
             <motion.div
-              className="h-full origin-left bg-[#c8a96b]"
+              key={activeImage.image}
+              className="relative flex h-[68vh] w-[calc(100vw-90px)] max-w-[1450px] items-center justify-center sm:h-[78vh] sm:w-[calc(100vw-150px)] md:h-[82vh] md:w-[calc(100vw-190px)]"
+              initial={{
+                opacity: 0,
+                scale: 0.94,
+                y: 18,
+              }}
               animate={{
-                scaleX:
-                  (activeIndex + 1) /
-                  galleryImages.length,
+                opacity: 1,
+                scale: 1,
+                y: 0,
               }}
               transition={{
-                duration: 0.5,
+                duration: 0.65,
                 ease,
               }}
-            />
-          </div>
-        </motion.div>
-      )}
+              onClick={(event) =>
+                event.stopPropagation()
+              }
+            >
+              <img
+                src={activeImage.image}
+                alt={activeImage.title}
+                draggable={false}
+                className="max-h-full max-w-full object-contain"
+              />
+
+              {/* IMAGE FRAME */}
+
+              <div className="pointer-events-none absolute inset-0 border border-white/[0.08]" />
+            </motion.div>
+
+            {/* =================================================
+                NEXT BUTTON
+            ================================================= */}
+
+            <button
+              type="button"
+              aria-label="Next image"
+              onClick={(event) => {
+                event.stopPropagation();
+                nextImage();
+              }}
+              className="group absolute right-2 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/10 bg-black/25 backdrop-blur-md transition-all duration-500 hover:border-[#c8a96b]/50 hover:bg-[#c8a96b]/10 sm:right-5 sm:h-13 sm:w-13 md:right-8 md:h-14 md:w-14"
+            >
+              <span className="text-lg font-light text-white/65 transition-all duration-500 group-hover:translate-x-1 group-hover:text-[#c8a96b] sm:text-xl">
+                →
+              </span>
+            </button>
+
+            {/* =================================================
+                BOTTOM INFO
+            ================================================= */}
+
+            <motion.div
+              className="absolute bottom-4 left-4 right-4 z-30 flex flex-col gap-3 sm:bottom-7 sm:left-7 sm:right-7 sm:flex-row sm:items-end sm:justify-between md:bottom-9 md:left-9 md:right-9"
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.12,
+                duration: 0.65,
+                ease,
+              }}
+              onClick={(event) =>
+                event.stopPropagation()
+              }
+            >
+              <div>
+                <h3 className="font-display text-[28px] font-light leading-none text-white sm:text-[36px] md:text-[44px]">
+                  {activeImage.title}
+                </h3>
+
+                <p className="mt-2 font-display text-[13px] italic text-[#c8a96b] sm:text-[15px] md:text-[16px]">
+                  {activeImage.subtitle}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-white/35">
+                  {String(activeIndex + 1).padStart(
+                    2,
+                    "0"
+                  )}
+                </span>
+
+                <span className="h-px w-8 bg-white/20" />
+
+                <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-white/35">
+                  {String(
+                    galleryImages.length
+                  ).padStart(2, "0")}
+                </span>
+              </div>
+            </motion.div>
+
+            {/* =================================================
+                PROGRESS LINE
+            ================================================= */}
+
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-white/[0.08]">
+              <motion.div
+                className="h-full origin-left bg-[#c8a96b]"
+                animate={{
+                  scaleX:
+                    (activeIndex + 1) /
+                    galleryImages.length,
+                }}
+                transition={{
+                  duration: 0.5,
+                  ease,
+                }}
+              />
+            </div>
+          </motion.div>,
+          document.body
+        )}
+
+      {/* =====================================================
+          MARQUEE CSS
+      ===================================================== */}
+
+      <style jsx>{`
+        .gallery-marquee-track {
+          display: flex;
+          width: max-content;
+          animation: gallery-marquee 75s linear infinite;
+          will-change: transform;
+        }
+
+        .gallery-marquee-group {
+          display: flex;
+          flex-shrink: 0;
+          gap: 12px;
+          padding-right: 12px;
+        }
+
+        @media (min-width: 640px) {
+          .gallery-marquee-group {
+            gap: 16px;
+            padding-right: 16px;
+          }
+        }
+
+        @keyframes gallery-marquee {
+          from {
+            transform: translate3d(0, 0, 0);
+          }
+
+          to {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .gallery-marquee-track {
+            animation-play-state: paused !important;
+          }
+        }
+      `}</style>
     </>
   );
 }
@@ -867,6 +1150,8 @@ export default function Process() {
 
       <div className="relative mx-auto max-w-[1500px] px-6 pb-24 pt-32 sm:px-8 md:pb-32 md:pt-40 lg:px-12 lg:pt-48">
         <div className="grid grid-cols-12 gap-y-10">
+          {/* SECTION LABEL */}
+
           <motion.div
             className="col-span-12 lg:col-span-3"
             initial="hidden"
@@ -881,7 +1166,8 @@ export default function Process() {
               <span
                 className="text-[15px] italic leading-none text-[#c8a96b]/90 md:text-[17px]"
                 style={{
-                  fontFamily: "var(--font-display)",
+                  fontFamily:
+                    "var(--font-display)",
                   fontWeight: 500,
                 }}
               >
@@ -891,6 +1177,8 @@ export default function Process() {
               <span className="h-px w-12 bg-[#c8a96b]/30" />
             </div>
           </motion.div>
+
+          {/* INTRO TITLE */}
 
           <div className="col-span-12 lg:col-span-8 lg:col-start-5">
             <motion.h2
@@ -922,9 +1210,10 @@ export default function Process() {
               variants={introFade}
             >
               <p className="font-sans text-[14px] font-light leading-[1.9] tracking-[0.01em] text-[#aaa59d] md:text-[15px]">
-                From the first conversation to the final detail,
-                every stage is considered with the same attention,
-                discipline and sensitivity that defines our work.
+                From the first conversation to the
+                final detail, every stage is considered
+                with the same attention, discipline and
+                sensitivity that defines our work.
               </p>
             </motion.div>
           </div>
@@ -937,13 +1226,16 @@ export default function Process() {
 
       <div className="relative">
         {steps.map((step, index) => {
-          const imageLeft = step.layout === "image-left";
+          const imageLeft =
+            step.layout === "image-left";
 
           return (
             <article
               key={step.number}
               className="relative mx-auto max-w-[1500px] px-6 py-20 sm:px-8 md:py-28 lg:px-12 lg:py-36"
             >
+              {/* ARCHITECTURAL GUIDE */}
+
               <div
                 className={`pointer-events-none absolute top-0 hidden h-full w-px bg-white/[0.035] lg:block ${
                   imageLeft
@@ -951,6 +1243,8 @@ export default function Process() {
                     : "left-[25%]"
                 }`}
               />
+
+              {/* DESKTOP GRID */}
 
               <div className="relative grid items-center lg:grid-cols-12 lg:gap-0">
                 {/* IMAGE */}
@@ -979,7 +1273,8 @@ export default function Process() {
                       alt={step.imageAlt}
                       className="h-full w-full object-cover"
                       style={{
-                        objectPosition: step.position,
+                        objectPosition:
+                          step.position,
                       }}
                       whileHover={{
                         scale: 1.035,
@@ -1081,6 +1376,8 @@ export default function Process() {
                 </motion.div>
               </div>
 
+              {/* DIVIDER */}
+
               {index !== steps.length - 1 && (
                 <motion.div
                   className={`mt-20 flex md:mt-28 ${
@@ -1151,7 +1448,7 @@ export default function Process() {
       </div>
 
       {/* =====================================================
-          AUTO SCROLLING GALLERY
+          GALLERY
       ===================================================== */}
 
       <Gallery />
