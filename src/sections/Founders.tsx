@@ -2,83 +2,20 @@
 
 import { motion, type Variants } from "framer-motion";
 
-/* =========================================================
-   PROJECT DATA
-========================================================= */
-
-const projects = [
+const founders = [
   {
     number: "01",
-    title: "Chiron Villa",
-    location: "ECR · Chennai",
-    category: "Residential",
-    description:
-      "A refined contemporary villa shaped around spacious living, warm materials and understated detailing. Every space is carefully composed to create a calm, sophisticated home where architecture and interiors flow naturally together.",
-    images: [
-      "/images/projects/chiron1.jpeg",
-      "/images/projects/chiron4.jpeg",
-      "/images/projects/chiron3.jpeg",
-      "/images/projects/chiron2.jpeg",
-    ],
+    name: "Mohammed Rizwan Nadeem",
+    role: "Business Head",
+    image: "/images/founders/mohammed-rizwan-nadeem.png",
+    alt: "Mohammed Rizwan Nadeem, Founder of Rizzy's Design Concept",
   },
-
   {
     number: "02",
-    title: "S.I.S — Florence",
-    location: "Porur · Chennai",
-    category: "Residential",
-    description:
-      "A sophisticated residential interior balancing elegant finishes, thoughtful proportions and everyday functionality, creating a home that feels refined yet naturally lived-in.",
-    images: [
-      "/images/projects/sis1.jpeg",
-      "/images/projects/sis2.jpeg",
-      "/images/projects/sis3.jpeg",
-    ],
-  },
-
-  {
-    number: "03",
-    title: "SPR City",
-    location: "B2 · Chennai",
-    category: "Residential",
-    description:
-      "A contemporary urban residence defined by clean geometry, layered lighting and a restrained material palette, bringing together modern character and comfortable living.",
-    images: [
-      "/images/projects/spr1.jpeg",
-      "/images/projects/spr2.jpeg",
-      "/images/projects/spr3.jpeg",
-      "/images/projects/spr4.jpeg",
-    ],
-  },
-
-  {
-    number: "04",
-    title: "Tamaya",
-    location: "Royapettah · Chennai",
-    category: "Hookah Lounge",
-    description:
-      "A distinctive hookah lounge created around an immersive evening atmosphere, combining rich tones, intimate seating, dramatic lighting and layered textures to shape a memorable hospitality experience.",
-    images: [
-      "/images/projects/tamaya1.jpeg",
-      "/images/projects/tamaya2.jpeg",
-      "/images/projects/tamaya3.jpeg",
-      "/images/projects/tamaya4.jpeg",
-    ],
-  },
-
-  {
-    number: "05",
-    title: "Perambur Residence",
-    location: "Perambur · Chennai",
-    category: "Residential",
-    description:
-      "A personalised home where practical planning meets refined detailing, with warm materials and carefully considered spaces designed around the rhythm of everyday family life.",
-    images: [
-      "/images/projects/perambur1.jpeg",
-      "/images/projects/perambur2.jpeg",
-      "/images/projects/perambur3.jpeg",
-      "/images/projects/perambur4.jpeg",
-    ],
+    name: "Mubeen Nadeem",
+    role: "Managing Partner",
+    image: "/images/founders/mubeen-nadeem.png",
+    alt: "Mubeen Nadeem, Founder of Rizzy's Design Concept",
   },
 ];
 
@@ -86,17 +23,17 @@ const projects = [
    ANIMATIONS
 ========================================================= */
 
-const revealUp: Variants = {
+const fadeUp: Variants = {
   hidden: {
     opacity: 0,
-    y: 70,
+    y: 50,
   },
 
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 1.1,
+      duration: 1,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -129,963 +66,34 @@ const revealRight: Variants = {
     x: 0,
     transition: {
       duration: 1.15,
-      delay: 0.1,
+      delay: 0.12,
       ease: [0.22, 1, 0.36, 1],
     },
   },
 };
 
-const fadeUp: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 50,
-  },
-
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
-
-/* =========================================================
-   IMAGE COMPONENT
-
-   IMPORTANT:
-   - ONLY main / first image gets mobile height
-   - ALL OTHER IMAGES stay natural / original
-   - Desktop remains natural
-========================================================= */
-
-function ProjectImage({
-  image,
-  main = false,
-}: {
-  image: string;
-  main?: boolean;
-}) {
-  return (
-    <div
-      className={`
-        group
-        relative
-        w-full
-        overflow-hidden
-        bg-[#151311]
-
-        ${
-          main
-            ? `
-              /* ONLY FIRST PHOTO */
-
-              h-[28vh]
-              min-h-[180px]
-              max-h-[260px]
-
-              sm:h-[32vh]
-              sm:min-h-[220px]
-              sm:max-h-[330px]
-
-              md:h-auto
-              md:min-h-0
-              md:max-h-none
-            `
-            : `
-              /* OTHER PHOTOS — UNCHANGED */
-              h-auto
-            `
-        }
-      `}
-    >
-      <motion.img
-        src={image}
-        alt=""
-        draggable={false}
-        initial={{
-          opacity: 0,
-          scale: 1.04,
-        }}
-        whileInView={{
-          opacity: 1,
-          scale: 1,
-        }}
-        viewport={{
-          once: false,
-          amount: 0.1,
-        }}
-        transition={{
-          opacity: {
-            duration: main ? 1.1 : 0.9,
-          },
-
-          scale: {
-            duration: main ? 1.5 : 1.25,
-            ease: [0.22, 1, 0.36, 1],
-          },
-        }}
-        className={`
-          relative
-          block
-          w-full
-          object-contain
-          object-center
-          transition-transform
-          duration-[1200ms]
-          ease-out
-          group-hover:scale-[1.015]
-
-          ${
-            main
-              ? `
-                h-full
-
-                md:h-auto
-              `
-              : `
-                h-auto
-              `
-          }
-        `}
-      />
-
-      <div
-        className={`
-          pointer-events-none
-          absolute
-          inset-0
-
-          ${
-            main
-              ? "bg-gradient-to-t from-black/55 via-black/5 to-transparent"
-              : "bg-black/5"
-          }
-        `}
-      />
-
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-[3.5%]
-          border
-          border-white/10
-        "
-      />
-    </div>
-  );
-}
-
-/* =========================================================
-   PROJECT HEADER
-========================================================= */
-
-function ProjectHeader({
-  project,
-}: {
-  project: (typeof projects)[number];
-}) {
-  return (
-    <div
-      className="
-        mb-7
-        grid
-        gap-5
-
-        sm:mb-8
-        sm:gap-6
-
-        md:mb-10
-        md:grid-cols-[1fr_auto]
-        md:items-end
-      "
-    >
-      <div>
-        <div
-          className="
-            mb-4
-            flex
-            items-center
-            gap-3
-
-            sm:mb-5
-          "
-        >
-          <span
-            className="
-              h-px
-              w-7
-              bg-[#c8a96b]
-
-              sm:w-8
-            "
-          />
-
-          <span
-            className="
-              text-[7px]
-              uppercase
-              tracking-[0.3em]
-              text-white/45
-
-              sm:text-[8px]
-
-              md:text-[9px]
-            "
-            style={{
-              fontFamily: "var(--font-sans)",
-            }}
-          >
-            {project.category}
-          </span>
-        </div>
-
-        <h3
-          className="
-            text-[clamp(2.45rem,11vw,4.8rem)]
-            font-normal
-            leading-[0.84]
-            tracking-[-0.045em]
-            text-white
-
-            sm:text-[clamp(2.7rem,8vw,6rem)]
-
-            md:text-[clamp(2.7rem,6vw,6rem)]
-          "
-          style={{
-            fontFamily: "var(--font-display)",
-          }}
-        >
-          {project.title}
-        </h3>
-
-        <p
-          className="
-            mt-3
-            text-[7px]
-            uppercase
-            tracking-[0.25em]
-            text-white/35
-
-            sm:mt-4
-            sm:text-[8px]
-            sm:tracking-[0.28em]
-          "
-          style={{
-            fontFamily: "var(--font-sans)",
-          }}
-        >
-          {project.location}
-        </p>
-      </div>
-
-      <span
-        className="
-          text-[9px]
-          tracking-[0.25em]
-          text-white/25
-
-          md:text-[10px]
-        "
-        style={{
-          fontFamily: "var(--font-sans)",
-        }}
-      >
-        {project.number}
-      </span>
-    </div>
-  );
-}
-
-/* =========================================================
-   DESCRIPTION
-========================================================= */
-
-function ProjectDescription({
-  description,
-  align = "left",
-}: {
-  description: string;
-  align?: "left" | "right";
-}) {
-  return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{
-        once: false,
-        amount: 0.2,
-      }}
-      variants={fadeUp}
-      className={`
-        relative
-        max-w-[570px]
-
-        ${
-          align === "right"
-            ? "ml-auto text-right"
-            : ""
-        }
-      `}
-    >
-      <span
-        className="
-          mb-4
-          block
-          h-px
-          w-10
-          bg-[#c8a96b]/70
-
-          sm:mb-5
-          sm:w-12
-        "
-        style={{
-          marginLeft:
-            align === "right"
-              ? "auto"
-              : undefined,
-        }}
-      />
-
-      <p
-        className="
-          text-[16px]
-          font-normal
-          italic
-          leading-[1.55]
-          tracking-[-0.01em]
-          text-[#d8d0c2]/85
-
-          sm:text-[18px]
-
-          md:text-[23px]
-        "
-        style={{
-          fontFamily: "var(--font-display)",
-        }}
-      >
-        {description}
-      </p>
-    </motion.div>
-  );
-}
-
-/* =========================================================
-   PROJECT 01
-========================================================= */
-
-function ProjectOne() {
-  const project = projects[0];
-
-  return (
-    <div>
-      <ProjectHeader project={project} />
-
-      <div
-        className="
-          grid
-          gap-6
-
-          md:block
-        "
-      >
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealUp}
-          className="relative"
-        >
-          <ProjectImage
-            image={project.images[0]}
-            main
-          />
-        </motion.div>
-
-        <div
-          className="
-            mt-0
-
-            md:mt-12
-            md:ml-[10vw]
-          "
-        >
-          <ProjectDescription
-            description={project.description}
-          />
-        </div>
-      </div>
-
-      {/* SECONDARY IMAGES */}
-
-      <div
-        className="
-          mt-8
-          grid
-          gap-5
-
-          sm:mt-10
-
-          md:mt-12
-          md:grid-cols-[0.72fr_1.28fr]
-          md:items-start
-        "
-      >
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealLeft}
-        >
-          <ProjectImage
-            image={project.images[1]}
-          />
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealRight}
-        >
-          <ProjectImage
-            image={project.images[2]}
-          />
-        </motion.div>
-      </div>
-
-      {/* FOURTH IMAGE */}
-
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{
-          once: false,
-          amount: 0.12,
-        }}
-        variants={revealUp}
-        className="
-          relative
-          mt-5
-
-          md:ml-[17vw]
-          md:mt-8
-        "
-      >
-        <ProjectImage
-          image={project.images[3]}
-        />
-      </motion.div>
-    </div>
-  );
-}
-
-/* =========================================================
-   PROJECT 02
-========================================================= */
-
-function ProjectTwo() {
-  const project = projects[1];
-
-  return (
-    <div>
-      <ProjectHeader project={project} />
-
-      <div
-        className="
-          grid
-          gap-6
-
-          md:grid-cols-[0.72fr_1.28fr]
-          md:items-start
-          md:gap-[6vw]
-        "
-      >
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealLeft}
-          className="
-            md:mt-[8vh]
-          "
-        >
-          <ProjectImage
-            image={project.images[0]}
-            main
-          />
-        </motion.div>
-
-        <div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{
-              once: false,
-              amount: 0.12,
-            }}
-            variants={revealRight}
-          >
-            <ProjectImage
-              image={project.images[1]}
-            />
-          </motion.div>
-
-          <div
-            className="
-              mt-6
-
-              sm:mt-8
-
-              md:mt-10
-            "
-          >
-            <ProjectDescription
-              description={project.description}
-            />
-          </div>
-
-          <div
-            className="
-              mt-8
-              grid
-              gap-5
-
-              sm:mt-10
-
-              md:mt-12
-              md:grid-cols-2
-              md:items-start
-            "
-          >
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{
-                once: false,
-                amount: 0.1,
-              }}
-              variants={revealRight}
-            >
-              <ProjectImage
-                image={project.images[2]}
-              />
-            </motion.div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* =========================================================
-   PROJECT 03
-========================================================= */
-
-function ProjectThree() {
-  const project = projects[2];
-
-  return (
-    <div>
-      <ProjectHeader project={project} />
-
-      {/* MAIN IMAGE */}
-
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{
-          once: false,
-          amount: 0.12,
-        }}
-        variants={revealRight}
-        className="relative"
-      >
-        <ProjectImage
-          image={project.images[0]}
-          main
-        />
-      </motion.div>
-
-      {/* DESCRIPTION */}
-
-      <div
-        className="
-          mt-6
-
-          sm:mt-8
-
-          md:ml-[24vw]
-          md:mt-12
-        "
-      >
-        <ProjectDescription
-          description={project.description}
-          align="left"
-        />
-      </div>
-
-      {/* OTHER IMAGES */}
-
-      <div
-        className="
-          mt-8
-          grid
-          gap-5
-
-          sm:mt-10
-
-          md:mt-12
-          md:grid-cols-[1fr_0.75fr_1fr]
-          md:items-start
-        "
-      >
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealLeft}
-        >
-          <ProjectImage
-            image={project.images[1]}
-          />
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealUp}
-          className="md:mt-[8vh]"
-        >
-          <ProjectImage
-            image={project.images[2]}
-          />
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealRight}
-        >
-          <ProjectImage
-            image={project.images[3]}
-          />
-        </motion.div>
-      </div>
-    </div>
-  );
-}
-
-/* =========================================================
-   PROJECT 04 — TAMAYA HOOKAH LOUNGE
-========================================================= */
-
-function ProjectFour() {
-  const project = projects[3];
-
-  return (
-    <div>
-      {/* HEADER + MAIN IMAGE */}
-
-      <div
-        className="
-          grid
-          gap-7
-
-          sm:gap-10
-
-          md:grid-cols-[0.35fr_1fr]
-          md:items-start
-          md:gap-[7vw]
-        "
-      >
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.15,
-          }}
-          variants={revealLeft}
-          className="md:mb-[7vh]"
-        >
-          <ProjectHeader project={project} />
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealRight}
-        >
-          <ProjectImage
-            image={project.images[0]}
-            main
-          />
-        </motion.div>
-      </div>
-
-      {/* DESCRIPTION */}
-
-      <div
-        className="
-          mt-6
-
-          sm:mt-8
-
-          md:ml-[23vw]
-          md:mt-12
-        "
-      >
-        <ProjectDescription
-          description={project.description}
-        />
-      </div>
-
-      {/* SECONDARY IMAGES */}
-
-      <div
-        className="
-          mt-8
-          grid
-          gap-5
-
-          sm:mt-10
-
-          md:ml-[23vw]
-          md:mt-12
-          md:grid-cols-[1.15fr_0.85fr]
-          md:items-start
-        "
-      >
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealLeft}
-        >
-          <ProjectImage
-            image={project.images[1]}
-          />
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealRight}
-          className="md:mt-[8vh]"
-        >
-          <ProjectImage
-            image={project.images[2]}
-          />
-        </motion.div>
-      </div>
-
-      {/* FOURTH IMAGE */}
-
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{
-          once: false,
-          amount: 0.12,
-        }}
-        variants={revealUp}
-        className="
-          mt-5
-
-          md:ml-[40vw]
-          md:mt-8
-        "
-      >
-        <ProjectImage
-          image={project.images[3]}
-        />
-      </motion.div>
-    </div>
-  );
-}
-
-/* =========================================================
-   PROJECT 05
-========================================================= */
-
-function ProjectFive() {
-  const project = projects[4];
-
-  return (
-    <div>
-      <ProjectHeader project={project} />
-
-      {/* MAIN IMAGE */}
-
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{
-          once: false,
-          amount: 0.12,
-        }}
-        variants={revealUp}
-        className="relative"
-      >
-        <ProjectImage
-          image={project.images[0]}
-          main
-        />
-      </motion.div>
-
-      {/* DESCRIPTION */}
-
-      <div
-        className="
-          mt-6
-
-          sm:mt-8
-
-          md:ml-[10vw]
-          md:mt-12
-        "
-      >
-        <ProjectDescription
-          description={project.description}
-        />
-      </div>
-
-      {/* SECONDARY IMAGES */}
-
-      <div
-        className="
-          mt-8
-          grid
-          gap-5
-
-          sm:mt-10
-
-          md:mt-12
-          md:grid-cols-[1.3fr_0.7fr]
-          md:items-start
-        "
-      >
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealLeft}
-        >
-          <ProjectImage
-            image={project.images[1]}
-          />
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.12,
-          }}
-          variants={revealRight}
-          className="md:mt-[9vh]"
-        >
-          <ProjectImage
-            image={project.images[2]}
-          />
-        </motion.div>
-      </div>
-
-      {/* FOURTH IMAGE */}
-
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{
-          once: false,
-          amount: 0.12,
-        }}
-        variants={revealUp}
-        className="
-          relative
-          mt-5
-
-          md:ml-[18vw]
-          md:mt-8
-        "
-      >
-        <ProjectImage
-          image={project.images[3]}
-        />
-      </motion.div>
-    </div>
-  );
-}
-
-/* =========================================================
-   MAIN COMPONENT
-========================================================= */
-
-export default function Projects() {
+export default function Founders() {
   return (
     <section
-      id="portfolio"
+      id="founders"
       className="
         relative
         overflow-hidden
-        bg-[#080807]
+        bg-[#0b0a09]
         text-[#f1eee7]
       "
     >
       {/* =====================================================
-          INTRO
+          TOP SPACE
       ===================================================== */}
 
       <div className="h-[14vh] md:h-[20vh]" />
 
-      <div
-        className="
-          mx-auto
-          w-[84vw]
-          max-w-[1500px]
-        "
-      >
+      {/* =====================================================
+          SECTION INTRO
+      ===================================================== */}
+
+      <div className="mx-auto w-[84vw] max-w-[1500px]">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -1093,20 +101,10 @@ export default function Projects() {
             once: false,
             amount: 0.2,
           }}
-          variants={revealUp}
-          className="
-            flex
-            items-center
-            gap-4
-          "
+          variants={fadeUp}
+          className="flex items-center gap-4"
         >
-          <span
-            className="
-              h-px
-              w-10
-              bg-[#c8a96b]
-            "
-          />
+          <span className="h-px w-10 bg-[#c8a96b]" />
 
           <span
             className="
@@ -1114,14 +112,13 @@ export default function Projects() {
               uppercase
               tracking-[0.34em]
               text-white/45
-
               md:text-[10px]
             "
             style={{
               fontFamily: "var(--font-sans)",
             }}
           >
-            04 / Selected Work
+            03 / The Founders
           </span>
         </motion.div>
 
@@ -1129,15 +126,16 @@ export default function Projects() {
           className="
             mt-8
             grid
-            gap-8
-
-            sm:gap-10
-
+            gap-10
             md:mt-12
-            md:grid-cols-[1.3fr_0.7fr]
+            md:grid-cols-[1.15fr_0.85fr]
             md:items-end
           "
         >
+          {/* =================================================
+              MAIN TITLE
+          ================================================= */}
+
           <motion.h2
             initial="hidden"
             whileInView="visible"
@@ -1147,26 +145,37 @@ export default function Projects() {
             }}
             variants={revealLeft}
             className="
-              max-w-[950px]
-              text-[clamp(3.1rem,10vw,7.8rem)]
+              max-w-[900px]
+              text-[clamp(3.2rem,10vw,7.8rem)]
               font-normal
-              leading-[0.84]
-              tracking-[-0.05em]
+              leading-[0.82]
+              tracking-[-0.055em]
               text-white
-
-              md:text-[clamp(4rem,7.5vw,8rem)]
             "
             style={{
               fontFamily: "var(--font-display)",
             }}
           >
-            Spaces with
+            Two minds.
             <br />
 
-            <span className="italic text-white/50">
-              a point of view.
+            <span
+              className="
+                italic
+                font-medium
+                text-[#d8d0c2]/70
+              "
+              style={{
+                fontFamily: "var(--font-display)",
+              }}
+            >
+              One vision.
             </span>
           </motion.h2>
+
+          {/* =================================================
+              INTRO COPY
+          ================================================= */}
 
           <motion.p
             initial="hidden"
@@ -1177,12 +186,11 @@ export default function Projects() {
             }}
             variants={revealRight}
             className="
-              max-w-[370px]
-              text-[12px]
+              max-w-[390px]
+              text-[13px]
               font-light
-              leading-[1.85]
+              leading-[1.9]
               text-white/50
-
               md:justify-self-end
               md:text-[14px]
             "
@@ -1190,135 +198,415 @@ export default function Projects() {
               fontFamily: "var(--font-sans)",
             }}
           >
-            A selection of spaces shaped through
-            proportion, material, atmosphere and the
-            details that make a room feel unmistakably
-            its own.
+            Founded in 2005 by Mubeen Nadeem and
+            Mohammed Rizwan Nadeem, Rizzy&apos;s Design
+            Concept grew from a shared belief that
+            quality interiors begin with understanding
+            the people who live in them.
           </motion.p>
         </div>
       </div>
 
       {/* =====================================================
-          PROJECT 01
+          FOUNDERS
       ===================================================== */}
 
       <div
         className="
           mx-auto
-          mt-[12vh]
+          mt-[10vh]
           w-[84vw]
           max-w-[1500px]
 
-          md:mt-[13vh]
+          sm:mt-[11vh]
+
+          md:mt-[12vh]
         "
       >
-        <ProjectOne />
+        <div
+          className="
+            grid
+            gap-[10vh]
+
+            sm:gap-[12vh]
+
+            md:grid-cols-2
+            md:gap-[7vw]
+          "
+        >
+          {founders.map((founder, index) => (
+            <motion.article
+              key={founder.name}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: false,
+                amount: 0.15,
+              }}
+              variants={
+                index === 0
+                  ? revealLeft
+                  : revealRight
+              }
+              className={`
+                relative
+                min-w-0
+
+                ${
+                  index === 1
+                    ? "md:mt-[14vh]"
+                    : ""
+                }
+              `}
+            >
+              {/* =================================================
+                  IMAGE
+              ================================================= */}
+
+              <div
+                className="
+                  group
+                  relative
+                  mx-auto
+                  aspect-[0.82]
+                  w-[88%]
+                  overflow-hidden
+                  bg-[#151311]
+
+                  sm:w-[90%]
+
+                  md:mx-0
+                  md:aspect-[0.78]
+                  md:w-full
+                "
+              >
+                <motion.div
+                  initial={{
+                    scale: 1.08,
+                  }}
+                  whileInView={{
+                    scale: 1,
+                  }}
+                  viewport={{
+                    once: false,
+                    amount: 0.15,
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="
+                    absolute
+                    inset-0
+                    bg-cover
+                    bg-center
+                    transition-transform
+                    duration-1000
+                    ease-out
+                    group-hover:scale-[1.025]
+                  "
+                  style={{
+                    backgroundImage: `url("${founder.image}")`,
+                  }}
+                  role="img"
+                  aria-label={founder.alt}
+                />
+
+                {/* IMAGE OVERLAY */}
+
+                <div
+                  className="
+                    absolute
+                    inset-0
+                    bg-gradient-to-t
+                    from-black/60
+                    via-black/10
+                    to-transparent
+                  "
+                />
+
+                {/* ARCHITECTURAL FRAME */}
+
+                <div
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-[4%]
+                    border
+                    border-white/15
+                  "
+                />
+
+                {/* NUMBER */}
+
+                <div
+                  className="
+                    absolute
+                    right-[7%]
+                    top-[7%]
+                  "
+                >
+                  <span
+                    className="
+                      text-[9px]
+                      tracking-[0.28em]
+                      text-white/65
+
+                      sm:text-[10px]
+
+                      md:text-[11px]
+                    "
+                    style={{
+                      fontFamily: "var(--font-sans)",
+                    }}
+                  >
+                    {founder.number}
+                  </span>
+                </div>
+
+                {/* ROLE */}
+
+                <div
+                  className="
+                    absolute
+                    bottom-[7%]
+                    left-[7%]
+                    flex
+                    max-w-[80%]
+                    items-center
+                    gap-3
+                  "
+                >
+                  <span className="h-px w-7 shrink-0 bg-[#c8a96b] sm:w-8" />
+
+                  <span
+                    className="
+                      whitespace-nowrap
+                      text-[7px]
+                      uppercase
+                      tracking-[0.28em]
+                      text-white/70
+
+                      sm:text-[8px]
+                      sm:tracking-[0.32em]
+                    "
+                    style={{
+                      fontFamily:
+                        "var(--font-sans)",
+                    }}
+                  >
+                    {founder.role}
+                  </span>
+                </div>
+              </div>
+
+              {/* =================================================
+                  FOUNDER NAME
+              ================================================= */}
+
+              <div
+                className="
+                  mx-auto
+                  mt-6
+                  w-[88%]
+
+                  sm:mt-7
+                  sm:w-[90%]
+
+                  md:mx-0
+                  md:w-full
+                "
+              >
+                <div className="flex min-w-0 items-start justify-between gap-4">
+                  <h3
+                    className="
+                      min-w-0
+                      max-w-[540px]
+                      break-words
+                      text-[clamp(2.25rem,9vw,5.5rem)]
+                      font-normal
+                      italic
+                      leading-[0.88]
+                      tracking-[-0.045em]
+                      text-[#eee8dc]
+
+                      sm:text-[clamp(2.5rem,6vw,5.5rem)]
+
+                      md:text-[clamp(2.6rem,5.3vw,5.5rem)]
+                    "
+                    style={{
+                      fontFamily:
+                        "var(--font-display)",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {founder.name}
+                  </h3>
+
+                  <span
+                    className="
+                      hidden
+                      shrink-0
+                      text-[8px]
+                      uppercase
+                      tracking-[0.3em]
+                      text-[#c8a96b]/75
+
+                      md:mt-4
+                      md:block
+                    "
+                    style={{
+                      fontFamily:
+                        "var(--font-sans)",
+                    }}
+                  />
+                </div>
+
+                {/* SMALL GOLD LINE */}
+
+                <div
+                  className="
+                    mt-5
+                    h-px
+                    w-10
+                    bg-[#c8a96b]/60
+
+                    sm:mt-6
+                    sm:w-12
+                  "
+                />
+              </div>
+            </motion.article>
+          ))}
+        </div>
       </div>
 
       {/* =====================================================
-          PROJECT 02
+          FOUNDERS STORY
       ===================================================== */}
 
-      <div
-        className="
-          mx-auto
-          mt-[16vh]
-          w-[84vw]
-          max-w-[1500px]
+      <div className="mx-auto w-[84vw] max-w-[1500px]">
+        <div
+          className="
+            grid
+            gap-12
+            py-[15vh]
 
-          sm:mt-[18vh]
+            md:grid-cols-[0.55fr_1.45fr]
+            md:gap-24
+            md:items-start
+          "
+        >
+          {/* LEFT */}
 
-          md:mt-[20vh]
-        "
-      >
-        <ProjectTwo />
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: false,
+              amount: 0.25,
+            }}
+            variants={fadeUp}
+          >
+            <span
+              className="
+                text-[9px]
+                uppercase
+                tracking-[0.3em]
+                text-[#c8a96b]
+              "
+              style={{
+                fontFamily: "var(--font-sans)",
+              }}
+            >
+              The Story
+            </span>
+
+            <div className="mt-6 h-px w-16 bg-white/15" />
+          </motion.div>
+
+          {/* STORY */}
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: false,
+              amount: 0.2,
+            }}
+            variants={revealRight}
+          >
+            <p
+              className="
+                max-w-[1000px]
+                text-[clamp(1.65rem,3.8vw,3.8rem)]
+                font-normal
+                italic
+                leading-[1.16]
+                tracking-[-0.035em]
+                text-[#e5ded2]/90
+
+                md:text-[clamp(2rem,3.8vw,3.8rem)]
+              "
+              style={{
+                fontFamily:
+                  "var(--font-display)",
+                fontWeight: 400,
+              }}
+            >
+              What began in 2005 as a shared mission
+              to create quality interiors has grown
+              into a practice shaped by two decades of
+              hands-on dedication.
+            </p>
+
+            <p
+              className="
+                mt-14
+                max-w-[800px]
+                text-[12px]
+                font-light
+                leading-[1.9]
+                text-white/45
+
+                md:mt-9
+                md:text-[14px]
+              "
+              style={{
+                fontFamily:
+                  "var(--font-sans)",
+              }}
+            >
+              Both founders remain closely involved
+              with the work, bringing meticulous
+              attention to detail and a personal
+              approach to every project. Their
+              philosophy is simple — understand the
+              client, respect the space, and let
+              craftsmanship define the result.
+            </p>
+          </motion.div>
+        </div>
       </div>
 
       {/* =====================================================
-          PROJECT 03
+          CLOSING STATEMENT
       ===================================================== */}
 
-      <div
-        className="
-          mx-auto
-          mt-[16vh]
-          w-[84vw]
-          max-w-[1500px]
-
-          sm:mt-[18vh]
-
-          md:mt-[20vh]
-        "
-      >
-        <ProjectThree />
-      </div>
-
-      {/* =====================================================
-          PROJECT 04
-      ===================================================== */}
-
-      <div
-        className="
-          mx-auto
-          mt-[16vh]
-          w-[84vw]
-          max-w-[1500px]
-
-          sm:mt-[18vh]
-
-          md:mt-[20vh]
-        "
-      >
-        <ProjectFour />
-      </div>
-
-      {/* =====================================================
-          PROJECT 05
-      ===================================================== */}
-
-      <div
-        className="
-          mx-auto
-          mt-[16vh]
-          w-[84vw]
-          max-w-[1500px]
-
-          sm:mt-[18vh]
-
-          md:mt-[20vh]
-        "
-      >
-        <ProjectFive />
-      </div>
-
-      {/* =====================================================
-          CLOSING
-      ===================================================== */}
-
-      <div
-        className="
-          mx-auto
-          w-[84vw]
-          max-w-[1500px]
-          pb-[16vh]
-        "
-      >
+      <div className="mx-auto w-[84vw] max-w-[1500px] pb-[16vh]">
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{
             once: false,
-            amount: 0.2,
+            amount: 0.25,
           }}
           variants={fadeUp}
           className="
             relative
-            mt-[18vh]
             border-t
             border-white/10
             pt-[10vh]
-
-            md:mt-[20vh]
           "
         >
           <div
@@ -1335,21 +623,24 @@ export default function Projects() {
           <p
             className="
               max-w-[1100px]
-              text-[clamp(2rem,5vw,5.5rem)]
+              text-[clamp(2.2rem,5.2vw,5.7rem)]
               font-normal
-              leading-[0.95]
+              italic
+              leading-[0.92]
               tracking-[-0.045em]
-              text-white/90
+              text-[#e7dfd2]/90
             "
             style={{
-              fontFamily: "var(--font-display)",
+              fontFamily:
+                "var(--font-display)",
+              fontWeight: 500,
             }}
           >
-            Every project begins with a space,
+            A personal approach,
             <br />
 
-            <span className="italic text-[#c8a96b]/75">
-              and ends with a feeling.
+            <span className="text-[#c8a96b]/80">
+              carried through every detail.
             </span>
           </p>
         </motion.div>
