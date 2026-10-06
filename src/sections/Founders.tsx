@@ -475,11 +475,14 @@ export default function Founders() {
                     sm:w-12
                   "
                 />
+                
               </div>
             </motion.article>
           ))}
         </div>
       </div>
+
+
 
       {/* =====================================================
           FOUNDERS STORY
@@ -586,7 +589,238 @@ export default function Founders() {
               craftsmanship define the result.
             </p>
           </motion.div>
+
+
+          
         </div>
+        {/* =====================================================
+    RUMANA — AFTER THE STORY
+===================================================== */}
+
+<motion.div
+  initial="hidden"
+  whileInView="visible"
+  viewport={{
+    once: false,
+    amount: 0.2,
+  }}
+  variants={fadeUp}
+  className="
+    mx-auto
+    flex
+    w-full
+    max-w-[1200px]
+    flex-col
+    items-center
+    justify-center
+    px-4
+    pt-[5vh]
+    pb-[8vh]
+    text-center
+
+    sm:px-6
+    sm:pt-[6vh]
+
+    md:px-8
+    md:pt-[7vh]
+    md:pb-[10vh]
+
+    lg:pt-[6vh]
+  "
+>
+  {/* SMALL GOLD LINE */}
+  <div
+    className="
+      mx-auto
+      mb-6
+      h-px
+      w-16
+      bg-[#c8a96b]
+
+      md:mb-7
+      md:w-24
+    "
+  />
+
+  {/* LABEL */}
+<div
+  className="
+    flex
+    w-full
+    flex-col
+    items-center
+    justify-center
+    text-center
+  "
+>
+  {/* THE NEXT GENERATION */}
+  <p
+    className="
+      w-full
+      text-center
+      text-[9px]
+      uppercase
+      tracking-[0.45em]
+      text-[#c8a96b]
+
+      sm:text-[10px]
+      md:tracking-[0.5em]
+    "
+    style={{
+      fontFamily: "var(--font-sans)",
+    }}
+  >
+    The Next Generation
+  </p>
+
+  {/* RUMANA */}
+ <h2
+  className="
+    relative
+    top-[35px]
+    mt-2
+    w-full
+    px-4
+    text-center
+    text-[clamp(4.8rem,13vw,12rem)]
+    font-normal
+    leading-[1]
+    tracking-[-0.035em]
+
+    sm:top-[45px]
+    sm:text-[clamp(5.5rem,14vw,13rem)]
+
+    md:top-[55px]
+    md:text-[clamp(6rem,13vw,14rem)]
+
+    lg:top-[65px]
+    lg:text-[clamp(7rem,12vw,15rem)]
+    
+  "
+  style={{
+    fontFamily: "SymphonieCalligraphyDEMO-Regular, cursive",
+    fontWeight: 200,
+    color: "#c8a96b/80",
+    
+  }}
+>
+  <span className="text-[#c8a96b]/70">
+  Rumana
+  </span>
+</h2>
+  
+</div>
+  {/* GOLD LINE */}
+  <div
+    className="
+      mx-auto
+      mt-[4rem]
+      h-px
+      w-20
+      bg-[#c8a96b]/70
+
+      sm:mt-[5rem]
+      sm:w-28
+
+      md:mt-[7rem]
+
+      lg:mt-[7rem]
+    "
+  />
+
+  {/* =================================================
+      DESCRIPTION
+  ================================================= */}
+
+ <p
+  className="
+    mx-auto
+    mt-8
+    w-full
+    max-w-[1050px]
+    px-2
+    text-center
+    text-[clamp(1.45rem,2.6vw,2.35rem)]
+    font-normal
+    italic
+    leading-[1.25]
+    tracking-[-0.025em]
+    text-[#e5ded2]/90
+
+    sm:px-4
+    sm:mt-9
+
+    md:mt-10
+    md:px-0
+    md:leading-[1.3]
+
+    lg:mt-11
+  "
+  style={{
+    fontFamily: "var(--font-display)",
+    fontWeight: 400,
+  }}
+>
+  With a natural passion for creativity and design, Rumana brings
+  a fresh and contemporary perspective to the creative world.
+  Working independently as a freelancer, she explores design,
+  visual storytelling, and digital creativity, creating work that
+  reflects her own unique style and artistic expression.
+</p>
+  {/* =================================================
+      BOTTOM DETAIL
+  ================================================= */}
+
+  <div
+    className="
+      mt-8
+      flex
+      w-full
+      items-center
+      justify-center
+      gap-4
+
+      md:mt-10
+    "
+  >
+    <span
+      className="
+        h-px
+        w-10
+        bg-[#c8a96b]/30
+
+        md:w-16
+      "
+    />
+
+    <span
+      className="
+        text-[7px]
+        uppercase
+        tracking-[0.35em]
+        text-[#c8a96b]
+
+        md:text-[8px]
+        md:tracking-[0.45em]
+      "
+      style={{
+        fontFamily: "var(--font-sans)",
+      }}
+    >
+      Creativity · Design · Vision
+    </span>
+
+    <span
+      className="
+        h-px
+        w-10
+        bg-[#c8a96b]/30
+
+        md:w-16
+      "
+    />
+  </div>
+</motion.div>
       </div>
 
       {/* =====================================================
