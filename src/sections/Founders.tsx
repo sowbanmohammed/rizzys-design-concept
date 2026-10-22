@@ -269,11 +269,11 @@ export default function Founders() {
                   relative
                   mx-auto
                   aspect-[0.82]
-                  w-[88%]
+                  w-[70%]
                   overflow-hidden
                   bg-[#151311]
 
-                  sm:w-[90%]
+                  sm:w-[70%]
 
                   md:mx-0
                   md:aspect-[0.78]
@@ -705,7 +705,7 @@ export default function Founders() {
   }}
 >
   <span className="text-[#c8a96b]/70">
-  Rumana
+  Rumanah
   </span>
 </h2>
   
